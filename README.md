@@ -1,2 +1,2 @@
-# ![Node/Express/MySQL User Album App](project-logo.png)
+Node/Express/MySQL/VueJs User Album App
 
