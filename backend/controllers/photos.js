@@ -11,10 +11,16 @@ const getAllPhotos = (req, res, next) => {
     if (typeof req.query.offset !== 'undefined') {
         offset = parseInt(req.query.offset) || 0;
     }
-    // let query = {};
-    // if(typeof req.query.search !== 'undefined'){
-    // } 
+    let query = {};
+    if(typeof req.query.search !== 'undefined'){
+        search =  req.query.search;
+        query[Op.or]= [
+            { title: { [Op.like]: '%'+search+'%'} }, 
+            { url: { [Op.like]: '%'+search+'%'} }, 
+        ];
+    } 
     Photos.findAndCountAll({
+        where : query,
         order: [
             ['id', "DESC"]
         ],
@@ -85,12 +91,17 @@ const getAlbumPhotos = (req,res,next) => {
     if (typeof req.query.offset !== 'undefined') {
         offset = parseInt(req.query.offset) || 0;
     }
-    // let query = {};
-    // if(typeof req.query.search !== 'undefined'){
-    // } 
+    let query = {};
+    if(typeof req.query.search !== 'undefined'){
+        search =  req.query.search;
+        query[Op.or]= [
+            { title: { [Op.like]: '%'+search+'%'} }, 
+            { url: { [Op.like]: '%'+search+'%'} }, 
+        ];
+    } 
     Photos.findAndCountAll({
         where : {
-            album_id : req.params.id
+            [Op.and]: [{album_id : req.params.id }, query], 
         },
         order: [
             ['id', "DESC"]

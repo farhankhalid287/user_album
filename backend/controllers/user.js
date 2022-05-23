@@ -11,10 +11,20 @@ const getAllUsers = (req, res, next) => {
     if (typeof req.query.offset !== 'undefined') {
         offset = parseInt(req.query.offset) || 0;
     }
-    // let query = {};
-    // if(typeof req.query.search !== 'undefined'){
-    // } 
+    let query = {};
+    if(typeof req.query.search !== 'undefined'){
+        search =  req.query.search;
+        query[Op.or]= [
+            { username: { [Op.like]: '%'+search+'%'} }, 
+            { email: { [Op.like]: '%'+search+'%'} }, 
+            { first_name: { [Op.like]: '%'+search+'%'} }, 
+            { last_name: { [Op.like]: '%'+search+'%'} }, 
+            { mobile: { [Op.like]: '%'+search+'%'} },
+            { cnic: { [Op.like]: '%'+search+'%'} },  
+        ];
+    } 
     User.findAndCountAll({
+        where : query,
         order: [
             ['id', "DESC"]
         ],
